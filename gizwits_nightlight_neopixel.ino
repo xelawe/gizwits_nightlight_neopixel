@@ -128,7 +128,7 @@ void setup() {
 
   set_rgb(255, 255, 255);
 
-  wifi_init(gv_clientname);
+  wifi_init(gc_hostname);
 
   init_ota(gv_clientname);
 
@@ -217,18 +217,22 @@ void loop() {
     if ( LDRValue < LDRThres ) {
       // --> Turn On Light
       analogWrite(ledpinbl, 255);
-      colorWipe(strip.Color(255, 0, 0), 0); // Red
-      //digitalWrite(lightpin1, HIGH);
-      //digitalWrite(lightpin2, HIGH);
-      gv_light_on = true;
+      if (gv_light_on == false ) {
+        colorWipe(strip.Color(255, 0, 0), 10); // Red
+        //digitalWrite(lightpin1, HIGH);
+        //digitalWrite(lightpin2, HIGH);
+        gv_light_on = true;
+      }
     }
 
   } else {
     analogWrite(ledpinbl, 0);
-    colorWipe(strip.Color(0, 0, 0), 0); // Off
-    //digitalWrite(lightpin1, LOW);
-    //digitalWrite(lightpin2, LOW);
-    gv_light_on = false;
+    if (gv_light_on == true ) {
+      colorWipe(strip.Color(0, 0, 0), 10); // Off
+      //digitalWrite(lightpin1, LOW);
+      //digitalWrite(lightpin2, LOW);
+      gv_light_on = false;
+    }
   }
 
   delay(100);
