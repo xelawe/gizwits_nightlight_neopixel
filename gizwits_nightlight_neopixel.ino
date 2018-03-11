@@ -29,6 +29,7 @@ int LDRValue;
 volatile boolean gv_PIR_Int;
 boolean gv_PIR_on = false;
 boolean gv_light_on = false;
+boolean gv_neo_on = false;
 
 const int CMD_WAIT = 0;
 const int CMD_BUTTON_CHANGE = 1;
@@ -190,10 +191,8 @@ void loop() {
 
     // Lights off: measure LDR
     // so turn off all LEDs
-    analogWrite(ledpingn, 0);
-    analogWrite(ledpinrt, 0);
-    analogWrite(ledpinbl, 0);
-    delay(100);
+    set_rgb(0, 0, 0);
+    delay(200);
 
     // now measure LDR
     LDRValue = analogRead(LDRPin);
@@ -217,22 +216,25 @@ void loop() {
     if ( LDRValue < LDRThres ) {
       // --> Turn On Light
       analogWrite(ledpinbl, 255);
-      if (gv_light_on == false ) {
+      if (gv_neo_on == false ) {
         colorWipe(strip.Color(255, 0, 0), 10); // Red
         //digitalWrite(lightpin1, HIGH);
         //digitalWrite(lightpin2, HIGH);
-        gv_light_on = true;
+        gv_neo_on = true;
+
       }
+      gv_light_on = true;
     }
 
   } else {
     analogWrite(ledpinbl, 0);
-    if (gv_light_on == true ) {
+    if (gv_neo_on == true ) {
       colorWipe(strip.Color(0, 0, 0), 10); // Off
       //digitalWrite(lightpin1, LOW);
       //digitalWrite(lightpin2, LOW);
-      gv_light_on = false;
+      gv_neo_on = false;
     }
+    gv_light_on = false;
   }
 
   delay(100);
