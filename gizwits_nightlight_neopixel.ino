@@ -37,12 +37,12 @@ int cmd = CMD_WAIT;
 int buttonState = HIGH;
 static long startPress = 0;
 
-
-
-
 Ticker ticker_piroff;
+Ticker ticker_LDRmeas;
+boolean gv_tickPIRmeas = true;
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NeoCnt, NeoPIN, NEO_GRB + NEO_KHZ800);
+
 
 void set_rgb(int iv_red, int iv_green, int iv_blue) {
 
@@ -80,6 +80,10 @@ void piroff()
 {
   gv_PIR_on = false;
   ticker_piroff.detach();
+}
+
+void tickPIRmeas() {
+  gv_tickPIRmeas = true;
 }
 
 void restart() {
@@ -147,6 +151,8 @@ void setup() {
 
   delay(500);
 
+  ticker_LDRmeas.attach(1, tickPIRmeas);
+
 }
 
 void loop() {
@@ -187,7 +193,7 @@ void loop() {
       break;
   }
 
-  if ( !gv_light_on ) {
+  if ( !gv_light_on && gv_tickPIRmeas) {
 
     // Lights off: measure LDR
     // so turn off all LEDs
@@ -201,6 +207,7 @@ void loop() {
     if ( LDRValue < LDRThres ) {
       analogWrite(ledpingn, 10);
     }
+    gv_tickPIRmeas = false;
   }
 
   int pirState = digitalRead(pirpin);
