@@ -7,6 +7,9 @@ const char *gc_hostname = "NghtLghtNeo";
 #include "cy_ota.h"
 #include <Ticker.h>
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Pins
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #define btnpin 4
 #define ledpinbl 13
 #define ledpinrt 15
@@ -20,11 +23,16 @@ const char *gc_hostname = "NghtLghtNeo";
 #define NeoPIN 5 // Neopixel data pin
 #define NeoCnt 6
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Parameter for Timing, ...
-#define LDRThres 5
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#define LDRThres 500
 // Light On Time in s
-#define OnTimeLight 25
+#define OnTimeLight 15
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// global Variables
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 int LDRValue;
 volatile boolean gv_PIR_Int;
 boolean gv_PIR_on = false;
@@ -228,7 +236,6 @@ void loop() {
         //digitalWrite(lightpin1, HIGH);
         //digitalWrite(lightpin2, HIGH);
         gv_neo_on = true;
-
       }
       gv_light_on = true;
     }
