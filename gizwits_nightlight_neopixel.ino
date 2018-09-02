@@ -228,7 +228,7 @@ void loop() {
 
     // show result of measurement
     if ( LDRValue < LDRThres ) {
-      analogWrite(ledpingn, 50);
+      //analogWrite(ledpingn, 50);
     }
     gv_tickPIRmeas = false;
   }
