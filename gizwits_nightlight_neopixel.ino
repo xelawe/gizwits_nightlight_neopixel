@@ -26,7 +26,7 @@ const char *gc_hostname = "NghtLghtNeo";
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Parameter for Timing, ...
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#define LDRThres 500
+#define LDRThres 150
 // Light On Time in s
 #define OnTimeLight 15
 
@@ -132,10 +132,13 @@ void setup() {
   strip.begin();
   strip.show(); // Initialize all pixels to 'off'
   colorWipe(strip.Color(255, 0, 0), 10); // Red
+  set_rgb(255, 0, 0);
   delay(500);
   colorWipe(strip.Color(0, 255, 0), 10); //
+  set_rgb(0, 255, 0);
   delay(500);
   colorWipe(strip.Color(0, 0, 255), 10); //
+  set_rgb(0, 0, 255);
   delay(500);
   colorWipe(strip.Color(0, 0, 0), 10); //
 
@@ -213,20 +216,21 @@ void loop() {
 
     // show result of measurement
     if ( LDRValue < LDRThres ) {
-      analogWrite(ledpingn, 10);
+      analogWrite(ledpingn, 200);
     }
     gv_tickPIRmeas = false;
   }
 
   int pirState = digitalRead(pirpin);
 
-  if (pirState == 1) {
-    analogWrite(ledpinrt, 50);
-  } else {
-    analogWrite(ledpinrt, 0);
-  }
+  //  if (pirState == 1) {
+  //    analogWrite(ledpinrt, 50);
+  //  } else {
+  //    analogWrite(ledpinrt, 0);
+  //  }
 
   if (gv_PIR_on) {
+    analogWrite(ledpinrt, 50);
     // PIR trigged, is LDR OK?
     if ( LDRValue < LDRThres ) {
       // --> Turn On Light
@@ -241,6 +245,7 @@ void loop() {
     }
 
   } else {
+    analogWrite(ledpinrt, 0);
     analogWrite(ledpinbl, 0);
     if (gv_neo_on == true ) {
       colorWipe(strip.Color(0, 0, 0), 10); // Off
