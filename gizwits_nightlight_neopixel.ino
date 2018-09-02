@@ -228,7 +228,7 @@ void loop() {
 
     // show result of measurement
     if ( LDRValue < LDRThres ) {
-      analogWrite(ledpingn, 200);
+      analogWrite(ledpingn, 50);
     }
     gv_tickPIRmeas = false;
   }
@@ -243,6 +243,7 @@ void loop() {
 
   if (gv_PIR_on) {
     analogWrite(ledpinrt, 50);
+    
     // PIR trigged, is LDR OK?
     if ( LDRValue < LDRThres ) {
       // --> Turn On Light
