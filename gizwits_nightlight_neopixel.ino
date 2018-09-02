@@ -2,10 +2,11 @@
 #include <cy_serial.h>
 
 #include <Adafruit_NeoPixel.h>
-const char *gc_hostname = "NghtLghtNeo";
+
 #include "cy_wifi.h"
 #include "cy_ota.h"
 #include <Ticker.h>
+//#include "cy_mqtt.h"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Pins
@@ -26,7 +27,7 @@ const char *gc_hostname = "NghtLghtNeo";
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Parameter for Timing, ...
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#define LDRThres 150
+#define LDRThres 20
 // Light On Time in s
 #define OnTimeLight 15
 
@@ -51,6 +52,8 @@ boolean gv_tickPIRmeas = true;
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NeoCnt, NeoPIN, NEO_GRB + NEO_KHZ800);
 
+const char *gc_hostname = "NghtLghtNeo";
+//const char* mqtt_pubtopic_ldr   = "NghtLghtNeo/LDR/val";
 
 void set_rgb(int iv_red, int iv_green, int iv_blue) {
 
@@ -148,6 +151,8 @@ void setup() {
 
   init_ota(gv_clientname);
 
+  //init_mqtt(gv_clientname);
+
   set_rgb(0, 0, 0);
 
   strip.show(); // Initialize all pixels to 'off'
@@ -169,6 +174,8 @@ void setup() {
 void loop() {
 
   check_ota();
+
+  //check_mqtt();
 
   // Interrupt on PIR occured?
   if ( gv_PIR_Int == true ) {
@@ -214,6 +221,11 @@ void loop() {
     // now measure LDR
     LDRValue = analogRead(LDRPin);
 
+
+    //    char buffer[10];
+    //    dtostrf(LDRValue, 0, 1, buffer);
+    //    client.publish(mqtt_pubtopic_ldr, buffer, false);
+
     // show result of measurement
     if ( LDRValue < LDRThres ) {
       analogWrite(ledpingn, 200);
@@ -221,13 +233,13 @@ void loop() {
     gv_tickPIRmeas = false;
   }
 
-  int pirState = digitalRead(pirpin);
-
-  //  if (pirState == 1) {
-  //    analogWrite(ledpinrt, 50);
-  //  } else {
-  //    analogWrite(ledpinrt, 0);
-  //  }
+//  int pirState = digitalRead(pirpin);
+//
+//  if (pirState == 1) {
+//    analogWrite(ledpinrt, 255);
+//  } else {
+//    analogWrite(ledpinrt, 0);
+//  }
 
   if (gv_PIR_on) {
     analogWrite(ledpinrt, 50);
